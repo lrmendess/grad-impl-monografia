@@ -1,0 +1,30 @@
+﻿@model SCAP.ViewModels.AfastamentoViewModel
+
+<form asp-controller="Afastamentos" asp-action="DesbloquearAfastamento">
+    <div class="modal-header">
+        <h5 class="modal-title">Desbloquear pedido de afastamento</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <vc:summary></vc:summary>
+        <p>Informe a decisão tomada durante a reunião do DI.</p>
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <label asp-for="DecisaoReuniao" class="control-label"></label><br />
+            <select id="select-decisao-reuniao"
+                    class="form-control"
+                    asp-for="DecisaoReuniao">
+                <option disabled selected value=""></option>
+                <option value="1">Aprovar pedido</option>
+                <option value="2">Reprovar pedido</option>
+            </select>
+            <span asp-validation-for="DecisaoReuniao" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Cancelar" />
+        <input type="submit" class="btn btn-primary" value="Desbloquear" />
+    </div>
+</form>

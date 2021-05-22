@@ -1,0 +1,50 @@
+﻿@model SCAP.ViewModels.UserViewModel
+
+<form asp-controller="Users" asp-action="Create">
+    <div class="modal-header">
+        <h5 class="modal-title">Novo usuário</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <vc:summary></vc:summary>
+        <div class="form-group">
+            <label asp-for="Nome" class="control-label"></label>
+            <input placeholder="Ex: João" asp-for="Nome" class="form-control" />
+            <span asp-validation-for="Nome" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Sobrenome" class="control-label"></label>
+            <input placeholder="Ex: Paulo" asp-for="Sobrenome" class="form-control" />
+            <span asp-validation-for="Sobrenome" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="UserName" class="control-label"></label>
+            <input placeholder="Ex: 1234567890" asp-for="UserName" class="form-control" />
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="UserType" class="control-label"></label><br />
+            <select asp-for="UserType" class="custom-select">
+                <option value="1">Professor</option>
+                <option value="2">Secretário</option>
+            </select>
+            <span asp-validation-for="UserType" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Email" class="control-label"></label>
+            <input placeholder="Ex: jotape@email.com" asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PhoneNumber" class="control-label"></label>
+            <input placeholder="(99) 99999-9999" asp-for="PhoneNumber" class="form-control" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Cancelar" />
+        <input type="submit" class="btn btn-primary" value="Salvar"/>
+    </div>
+</form>

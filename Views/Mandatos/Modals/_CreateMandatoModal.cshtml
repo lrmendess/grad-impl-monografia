@@ -1,0 +1,46 @@
+﻿@model SCAP.ViewModels.MandatoViewModel
+
+<form asp-controller="Mandatos" asp-action="Create">
+    <div class="modal-header">
+        <h5 class="modal-title">Novo mandato</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <vc:summary></vc:summary>
+        <div class="form-group">
+            <label asp-for="DataInicio" class="control-label"></label>
+            <input class="form-control" type="date" asp-for="DataInicio">
+            <span asp-validation-for="DataInicio" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="DataFim" class="control-label"></label>
+            <input class="form-control" type="date" asp-for="DataFim">
+            <span asp-validation-for="DataFim" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="TipoMandato" class="control-label"></label><br />
+            <select id="select-tipo-mandato" class="form-control" asp-for="TipoMandato">
+                <option disabled selected value=""></option>
+                <option value="1">Chefe</option>
+                <option value="2">Subchefe</option>
+            </select>
+            <span asp-validation-for="TipoMandato" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ProfessorId" class="control-label"></label><br />
+            <select id="select-chefe"
+                    class="form-control"
+                    asp-for="ProfessorId"
+                    asp-items="@ViewBag.ProfessorId">
+                <option disabled selected value=""></option>
+            </select>
+            <span asp-validation-for="ProfessorId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Cancelar" />
+        <input type="submit" class="btn btn-primary" value="Salvar" />
+    </div>
+</form>

@@ -1,0 +1,208 @@
+﻿@model SCAP.ViewModels.MandatoViewModelCollection
+
+@{
+    ViewData["Title"] = "Mandatos";
+}
+
+<vc:summary></vc:summary>
+
+<div class="mb-4">
+    <h2>@ViewData["Title"]</h2>
+</div>
+
+<ul class="nav nav-tabs" id="mandatosTabContent" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="current-tab" data-toggle="tab" href="#current" role="tab" aria-controls="current" aria-selected="true">Vigentes</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="scheduled-tab" data-toggle="tab" href="#scheduled" role="tab" aria-controls="scheduled" aria-selected="true">Agendados</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="archived-tab" data-toggle="tab" href="#archived" role="tab" aria-controls="archived" aria-selected="false">Arquivados</a>
+    </li>
+    <li class="nav-item ml-auto">
+        <a class="nav-link"
+           supress-by-role="Secretario"
+           data-modal="create-mandato-modal"
+           asp-controller="Mandatos"
+           asp-action="Create">
+            <i class="fas fa-plus"></i>
+            <span class="d-none d-md-inline pl-2">
+                Adicionar mandato
+            </span>
+        </a>
+    </li>
+</ul>
+
+<div class="tab-content mt-3" id="mandatosTabContent">
+    <div class="tab-pane fade show active" id="current" role="tabpanel" aria-labelledby="current-tab">
+        <table class="table table-bordered table-hover" id="table-current">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Matrícula</th>
+                    <th>Nome</th>
+                    <th>Início</th>
+                    <th>Fim</th>
+                    <th>Tipo de mandato</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var mandato in Model.Chefes)
+                {
+                    <tr>
+                        <td>@mandato.Professor.UserName</td>
+                        <td>
+                            <a asp-controller="Users"
+                               asp-action="Details"
+                               asp-route-id="@mandato.ProfessorId">
+                                @mandato.Professor.Nome @mandato.Professor.Sobrenome
+                            </a>
+                        </td>
+                        <td>@mandato.DataInicio.ToShortDateString()</td>
+                        <td>@mandato.DataFim.ToShortDateString()</td>
+                        <td>@((TipoMandato) mandato.TipoMandato)</td>
+                        <td class="text-right action-area">
+                            <a class="btn btn-danger"
+                               supress-by-role="Secretario"
+                               data-modal="interromper-mandato-modal"
+                               asp-controller="Mandatos"
+                               asp-action="Interromper"
+                               asp-route-id="@mandato.Id">Interromper</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane fade" id="scheduled" role="tabpanel" aria-labelledby="scheduled-tab">
+        <table class="table table-bordered table-hover" id="table-scheduled">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Matrícula</th>
+                    <th>Nome</th>
+                    <th>Início</th>
+                    <th>Fim</th>
+                    <th>Tipo de mandato</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var mandato in Model.Agendados)
+                {
+                    <tr>
+                        <td>@mandato.Professor.UserName</td>
+                        <td>
+                            <a asp-controller="Users"
+                               asp-action="Details"
+                               asp-route-id="@mandato.ProfessorId">
+                                @mandato.Professor.Nome @mandato.Professor.Sobrenome
+                            </a>
+                        </td>
+                        <td>@mandato.DataInicio.ToShortDateString()</td>
+                        <td>@mandato.DataFim.ToShortDateString()</td>
+                        <td>@((TipoMandato) mandato.TipoMandato)</td>
+                        <td class="text-right action-area">
+                            <a class="btn btn-danger"
+                               data-modal="delete-mandato-modal"
+                               asp-controller="Mandatos"
+                               asp-action="Delete"
+                               asp-route-id="@mandato.Id">Excluir</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane fade" id="archived" role="tabpanel" aria-labelledby="archived-tab">
+        <table class="table table-bordered table-hover" id="table-archived">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Matrícula</th>
+                    <th>Nome</th>
+                    <th>Início</th>
+                    <th>Fim</th>
+                    <th>Tipo de mandato</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var mandato in Model.Arquivados)
+                {
+                    <tr>
+                        <td>@mandato.Professor.UserName</td>
+                        <td>
+                            <a asp-controller="Users"
+                               asp-action="Details"
+                               asp-route-id="@mandato.ProfessorId">
+                                @mandato.Professor.Nome @mandato.Professor.Sobrenome
+                            </a>
+                        </td>
+                        <td>@mandato.DataInicio.ToShortDateString()</td>
+                        <td>@mandato.DataFim.ToShortDateString()</td>
+                        <td>@((TipoMandato) mandato.TipoMandato)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            modalBag.add("interromper-mandato-modal");
+            modalBag.add("delete-mandato-modal");
+            modalBag.add("create-mandato-modal", function () {
+                $('#select-tipo-mandato').select2({
+                    language: "pt-BR",
+                    placeholder: "Selecione um tipo de mandato",
+                    allowClear: true,
+                    width: 'resolve'
+                });
+
+                $('#select-chefe').select2({
+                    language: "pt-BR",
+                    placeholder: "Selecione um chefe ou subchefe",
+                    allowClear: true,
+                    width: 'resolve'
+                });
+            });
+
+            const currentScheduledParams = {
+                columnDefs: [
+                    { orderable: false, targets: "_all" },
+                    { responsivePriority: 1, targets: [-1] },
+                    { responsivePriority: 2, targets: [1] },
+                    { responsivePriority: 3, targets: [2, 3] },
+                    { responsivePriority: 4, targets: [0, 4] }
+                ],
+                order: [],
+                dom: "<'row'<'col-sm-12't>>"
+            };
+
+            const tableCurrent = $("#table-current").DataTable(currentScheduledParams);
+            const tableScheduled = $("#table-scheduled").DataTable(currentScheduledParams);
+
+            const tableArchived = $("#table-archived").DataTable({
+                language: { searchPlaceholder: "Matrícula, nome ou data" },
+                columnDefs: [
+                    { responsivePriority: 1, targets: [1] },
+                    { responsivePriority: 2, targets: [2, 3] },
+                    { responsivePriority: 3, targets: [0, 4] }
+                ],
+                order: [[3, "desc"]],
+            });
+
+            const recalcTables = function () {
+                tableCurrent.columns.adjust().responsive.recalc();
+                tableScheduled.columns.adjust().responsive.recalc();
+                tableArchived.columns.adjust().responsive.recalc();
+            };
+
+            $(window).on('resize', recalcTables);
+            $('#mandatosTabContent .nav-link').on('shown.bs.tab', recalcTables);
+        });
+    </script>
+}

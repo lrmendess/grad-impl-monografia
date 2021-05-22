@@ -1,0 +1,150 @@
+﻿@model SCAP.ViewModels.UserViewModel
+
+@{
+    ViewData["Title"] = "Detalhes do usuário";
+}
+
+<vc:summary></vc:summary>
+<h2>@ViewData["Title"]</h2>
+
+<hr />
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.UserType)
+        </dt>
+        <dd class="col-sm-9">
+            @(Model.UserType == 1 ? "Professor" : "Secretário")
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+        <dd class="col-sm-9">
+            @Model.Nome @Model.Sobrenome
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+        <dd class="col-sm-9 phone-number">
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        <dt class="col-sm-3">
+            Situação
+        </dt>
+        <dd class="col-sm-9">
+            <div class="custom-control custom-switch">
+                <input id="user-details-ativo" asp-for="Ativo" type="checkbox" class="custom-control-input" disabled />
+                <label for="user-details-ativo" class="custom-control-label">Ativo</label>
+            </div>
+        </dd>
+    </dl>
+</div>
+
+@if (Model.UserType == 1)
+{
+    <div>
+        <hr />
+        <h4>Parentescos</h4>
+        <table class="table table-hover table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Nome</th>
+                    <th>Parentesco</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var parentesco in Model.Parentescos)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Users"
+                               asp-action="Details"
+                               asp-route-id="@parentesco.ParenteId">@parentesco.Parente.Nome @parentesco.Parente.Sobrenome</a>
+                        </td>
+                        <td>
+                            @((TipoParentesco) parentesco.TipoParentesco)
+                        </td>
+                        <td class="text-right">
+                            <a class="btn btn-danger"
+                               asp-controller="Parentescos"
+                               asp-action="Delete"
+                               asp-route-id="@parentesco.Id"
+                               data-modal="delete-parentesco-modal">Excluir</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<div class="action-area">
+    <a class="btn btn-outline-primary" href="javascript:history.back();">Voltar</a>
+
+    <a class="btn btn-outline-primary"
+       supress-by-role="Secretario"
+       asp-controller="Parentescos"
+       asp-action="Create"
+       asp-route-professorId="@Model.Id"
+       data-modal="create-parentesco-modal">Novo parentesco</a>
+
+    <a class="btn btn-outline-primary"
+       supress-by-role="Secretario"
+       asp-controller="Users"
+       asp-action="Edit"
+       asp-route-id="@Model.Id"
+       data-modal="edit-user-modal">Editar</a>
+
+    <a class="btn btn-danger"
+       supress-by-role="Secretario"
+       asp-controller="Users"
+       asp-action="Delete"
+       asp-route-id="@Model.Id"
+       data-modal="delete-user-modal">Excluir</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            modalBag.add("create-parentesco-modal", function () {
+                $('#select-parente').select2({
+                    language: "pt-BR",
+                    placeholder: "Selecione um parente",
+                    allowClear: true,
+                    width: 'resolve'
+                });
+            });
+            modalBag.add("delete-parentesco-modal");
+            modalBag.add("delete-user-modal");
+            modalBag.add("edit-user-modal", function () {
+                $("#PhoneNumber").inputmask({
+                    mask: ["(99) 9999-9999", "(99) 99999-9999"],
+                    keepStatic: true,
+                    removeMaskOnSubmit: true,
+                });
+            });
+
+            if ($(".phone-number").html().replace(/\D/g, "").length <= 10) {
+                $(".phone-number").mask("(00) 0000-0000");
+            } else {
+                $(".phone-number").mask("(00) 00000-0000");
+            }
+        });
+    </script>
+}

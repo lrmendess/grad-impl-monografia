@@ -1,0 +1,195 @@
+﻿@model SCAP.ViewModels.AfastamentoViewModelCollection
+
+@{
+    ViewData["Title"] = "Afastamentos";
+}
+
+<vc:summary></vc:summary>
+
+<div class="mb-4">
+    <h2>@ViewData["Title"]</h2>
+</div>
+
+<ul class="nav nav-tabs" id="afastamentosTabContent" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="all-tab" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="true">Todos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="own-tab" data-toggle="tab" href="#own" role="tab" aria-controls="own" aria-selected="true">Meus</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="reporter-tab" data-toggle="tab" href="#reporter" role="tab" aria-controls="reporter" aria-selected="true">Como Relator</a>
+    </li>
+    <li class="nav-item ml-auto">
+        <a class="nav-link"
+           supress-by-role="Professor"
+           asp-controller="Afastamentos"
+           asp-action="Create"
+           data-modal="create-afastamento-modal">
+            <i class="fas fa-plus"></i>
+            <span class="d-none d-md-inline pl-2">
+                Adicionar afastamento
+            </span>
+        </a>
+    </li>
+</ul>
+
+<div class="tab-content mt-3" id="afastamentosTabContent">
+    <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+        <table id="table-afastamentos" class="table table-hover table-bordered mt-3 mt-lg-0">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Código do pedido</th>
+                    <th>Data do pedido</th>
+                    <th>Solicitante</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Afastamentos)
+                {
+                    <tr>
+                        <td>
+                            <span class="badge badge-pill badge-primary">
+                                @((TipoAfastamento)item.TipoAfastamento)
+                            </span>
+                            <span class="badge badge-pill badge-primary">
+                                @((SituacaoPedidoAfastamento)item.Situacao)
+                            </span>
+                            <br />
+                            @item.Id
+                        </td>
+                        <td>
+                            @item.DataPedido.ToShortDateString()
+                        </td>
+                        <td>
+                            <a asp-controller="Users"
+                               asp-action="Details"
+                               asp-route-id="@item.SolicitanteId">
+                                @item.Solicitante.Nome @item.Solicitante.Sobrenome
+                            </a>
+                        </td>
+                        <td class="text-right">
+                            <a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@item.Id">Detalhes</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane fade" id="own" role="tabpanel" aria-labelledby="own-tab">
+        <table id="table-own" class="table table-hover table-bordered mt-3 mt-lg-0">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Código do pedido</th>
+                    <th>Data do pedido</th>
+                    <th>Solicitante</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.AfastamentosAsSolicitante)
+                {
+                    <tr>
+                        <td>
+                            <span class="badge badge-pill badge-primary">
+                                @((TipoAfastamento)item.TipoAfastamento)
+                            </span>
+                            <span class="badge badge-pill badge-primary">
+                                @((SituacaoPedidoAfastamento)item.Situacao)
+                            </span>
+                            <br />
+                            @item.Id
+                        </td>
+                        <td>
+                            @item.DataPedido.ToShortDateString()
+                        </td>
+                        <td>
+                            <a asp-controller="Users"
+                               asp-action="Details"
+                               asp-route-id="@item.SolicitanteId">
+                                @item.Solicitante.Nome @item.Solicitante.Sobrenome
+                            </a>
+                        </td>
+                        <td class="text-right">
+                            <a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@item.Id">Detalhes</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane fade" id="reporter" role="tabpanel" aria-labelledby="reporter-tab">
+        <table id="table-reporter" class="table table-hover table-bordered mt-3 mt-lg-0">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Código do pedido</th>
+                    <th>Data do pedido</th>
+                    <th>Solicitante</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.AfastamentosAsRelator)
+                {
+                    <tr>
+                        <td>
+                            <span class="badge badge-pill badge-primary">
+                                @((TipoAfastamento)item.TipoAfastamento)
+                            </span>
+                            <span class="badge badge-pill badge-primary">
+                                @((SituacaoPedidoAfastamento)item.Situacao)
+                            </span>
+                            <br />
+                            @item.Id
+                        </td>
+                        <td>
+                            @item.DataPedido.ToShortDateString()
+                        </td>
+                        <td>
+                            <a asp-controller="Users"
+                               asp-action="Details"
+                               asp-route-id="@item.SolicitanteId">
+                                @item.Solicitante.Nome @item.Solicitante.Sobrenome
+                            </a>
+                        </td>
+                        <td class="text-right">
+                            <a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@item.Id">Detalhes</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            modalBag.add("create-afastamento-modal");
+
+            const params = {
+                language: { searchPlaceholder: "Código, data ou solicitante" },
+                columnDefs: [
+                    { orderable: false, targets: [-1] },
+                    { responsivePriority: 1, targets: [-1] },
+                    { responsivePriority: 2, targets: [0] }
+                ],
+                order: [[1, "desc"]],
+            };
+
+            const tableAll = $("#table-afastamentos").DataTable(params);
+            const tableOwn = $("#table-own").DataTable(params);
+            const tableReporter = $("#table-reporter").DataTable(params);
+
+            const recalcTables = function () {
+                tableAll.columns.adjust().responsive.recalc();
+                tableOwn.columns.adjust().responsive.recalc();
+                tableReporter.columns.adjust().responsive.recalc();
+            };
+
+            $(window).on('resize', recalcTables);
+            $('#afastamentosTabContent .nav-link').on('shown.bs.tab', recalcTables);
+        });
+    </script>
+}

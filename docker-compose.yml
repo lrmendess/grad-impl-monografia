@@ -1,0 +1,49 @@
+﻿version: '3'
+
+#Volumes
+volumes:
+  scap_db_prod_volume:
+
+#Services
+services:
+  #Database
+  db:
+    image: mysql:5.7
+    container_name: scap_db_prod_container
+    environment:
+      MYSQL_ROOT_PASSWORD: scap@2021
+    ports:
+      - 3306:3306
+    volumes:
+      - scap_db_prod_volume:/var/lib/mysql
+    restart: always
+  #Application
+  app:
+    image: scap:1.0.0
+    container_name: scap_app_prod_container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      # Environment Config
+      ASPNETCORE_ENVIRONMENT: "Production"
+      # Database Config
+      ConnectionStrings:DefaultConnection: "server=scap_db_prod_container;port=3306;database=scap_db_prod;uid=root;password=scap@2021;allow user variables=true"
+      # Email Config
+      EmailSender:Host: "smtp.mailtrap.io"
+      EmailSender:Port: "2525"
+      EmailSender:EnableSSL: "True"
+      EmailSender:FromEmail: "no-reply@scap.ufes"
+      EmailSender:UserName: "USER_NAME"
+      EmailSender:Password: "PASSWORD"
+      # Logger Config
+      Kisslog:OrganizationId: "ORGANIZATION_ID"
+      Kisslog:ApplicationId: "APPLICATION_ID"
+      Kisslog:ApiUrl: "https://api.kisslog.net"
+    restart: always
+    depends_on:
+      - db
+    command: ["/wait-for-it.sh", "db:3306", "--", "dotnet", "SCAP.dll"]

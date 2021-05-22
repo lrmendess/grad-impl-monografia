@@ -1,0 +1,305 @@
+﻿@model SCAP.ViewModels.AfastamentoViewModel
+
+@{
+    ViewData["Title"] = "Detalhes do afastamento";
+}
+
+<vc:summary></vc:summary>
+<h2>@ViewData["Title"]</h2>
+
+<hr />
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-9">
+            @Model.Id
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.DataPedido)
+        </dt>
+        <dd class="col-sm-9">
+            @Model.DataPedido
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.DataInicio)
+        </dt>
+        <dd class="col-sm-9">
+            @Model.DataInicio.ToShortDateString()
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.DataFim)
+        </dt>
+        <dd class="col-sm-9">
+            @Model.DataFim.ToShortDateString()
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Situacao)
+        </dt>
+        <dd class="col-sm-9">
+            @((SituacaoPedidoAfastamento) Model.Situacao)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.TipoAfastamento)
+        </dt>
+        <dd class="col-sm-9">
+            @((TipoAfastamento) Model.TipoAfastamento)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Onus)
+        </dt>
+        <dd class="col-sm-9">
+            @((Onus) Model.Onus)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.NomeEvento)
+        </dt>
+        <dd class="col-sm-9">
+            @Model.NomeEvento
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.DataInicioEvento)
+        </dt>
+        <dd class="col-sm-9">
+            @Model.DataInicioEvento.ToShortDateString()
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.DataFimEvento)
+        </dt>
+        <dd class="col-sm-9">
+            @Model.DataFimEvento.ToShortDateString()
+        </dd>
+
+        @if (Model.TipoAfastamento == (int)TipoAfastamento.Internacional)
+        {
+            <dt class="col-sm-3">
+                @Html.DisplayNameFor(model => model.RelatorId)
+            </dt>
+            <dd class="col-sm-9">
+                @if (Model.Relator != null)
+                {
+                    <a asp-controller="Users"
+                        asp-action="Details"
+                        asp-route-id="@Model.RelatorId">@Model.Relator.Nome @Model.Relator.Sobrenome</a>
+                }
+                else
+                {
+                    Html.Raw("NÃO DEFINIDO");
+                }
+            </dd>
+        }
+
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.SolicitanteId)
+        </dt>
+        <dd class="col-sm-9">
+            <a asp-controller="Users"
+                asp-action="Details"
+                asp-route-id="@Model.SolicitanteId">@Model.Solicitante.Nome @Model.Solicitante.Sobrenome</a>
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Motivo)
+        </dt>
+        <dd class="col-sm-9">
+            @Model.Motivo
+        </dd>
+    </dl>
+</div>
+
+<div>
+    <div class="d-flex justify-content-between align-items-center">
+        <h4>Documentos</h4>
+        @if (User.IsInRole("Secretario") || User.Identity.Name == Model.Solicitante.UserName)
+        {
+            <a class="btn btn-sm btn-primary"
+                asp-controller="Documentos"
+                asp-action="Create"
+                asp-route-afastamentoId="@Model.Id"
+                data-modal="create-documento-modal">
+                <i class="fa fa-plus"></i>
+                <span class="d-none d-md-inline pl-2">
+                    Adicionar documento
+                </span>
+            </a>
+        }
+    </div>
+    <table class="table table-hover mt-0 table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Data de submissão</th>
+                <th>Nome do documento</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var document in Model.Documentos)
+            {
+                <tr>
+                    <td class="w-25">
+                        @document.DataSubmissao.ToShortDateString()
+                    </td>
+                    <td>
+                        @document.Titulo
+                    </td>
+                    <td class="text-right action-area">
+                        @if (User.IsInRole("Secretario") || User.Identity.Name == Model.Solicitante.UserName)
+                        {
+                            <a class="btn btn-danger"
+                               asp-controller="Documentos"
+                               asp-action="Delete"
+                               asp-route-id="@document.Id"
+                               data-modal="delete-documento-modal">Excluir&nbsp;&nbsp;<i class="fa fa-trash"></i></a>
+                        }
+
+                        <a class="btn btn-secondary"
+                            asp-controller="Documentos"
+                            asp-action="Download"
+                            asp-route-name="@document.NomeArquivo">Baixar&nbsp;&nbsp;<i class="fa fa-file-download"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <h4>Pareceres</h4>
+    <table class="table table-hover table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th class="d-none d-lg-table-cell">Data de emissão</th>
+                <th>Responsável</th>
+                <th>Julgamento</th>
+                <th class="d-none d-lg-table-cell">Justificativa</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var parecer in Model.Pareceres)
+            {
+                <tr>
+                    <td class="d-none d-lg-table-cell">
+                        @parecer.DataEmissao.ToShortDateString()
+                    </td>
+                    <td>
+                        <a asp-controller="Users"
+                            asp-action="Details"
+                            asp-route-id="@parecer.ProfessorId">@parecer.Professor.Nome @parecer.Professor.Sobrenome</a>
+                    </td>
+                    <td>
+                        @((TipoParecer)parecer.Julgamento)
+                    </td>
+                    <td class="d-none d-lg-table-cell">
+                        @parecer.Justificativa
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="action-area">
+    <a class="btn btn-outline-primary" href="javascript:history.back()">Voltar</a>
+
+    @if (Model.Solicitante.UserName != User.Identity.Name)
+    {
+        <a class="btn btn-outline-primary"
+           asp-controller="Pareceres"
+           asp-action="Create"
+           asp-route-afastamentoId="@Model.Id"
+           data-modal="create-parecer-modal">Emitir parecer</a>
+    }
+
+    <a class="btn btn-outline-primary"
+       supress-by-role="Chefe"
+       asp-action="EncaminharAfastamento"
+       asp-route-id="@Model.Id"
+       data-modal="encaminhar-afastamento-modal">Encaminhar</a>
+
+    <a class="btn btn-outline-primary"
+       supress-by-role="Secretario"
+       asp-action="DesbloquearAfastamento"
+       asp-route-id="@Model.Id"
+       data-modal="desbloquear-afastamento-modal">Desbloquear</a>
+
+    @if (Model.Solicitante.UserName == User.Identity.Name)
+    {
+        <a class="btn btn-outline-primary"
+           supress-by-role="Professor"
+           asp-action="ConfirmarSubmissaoDocumentos"
+           asp-route-id="@Model.Id"
+           data-modal="confirmar-submissao-documentos-modal">Confirmar documentos</a>
+    }
+
+    <a class="btn btn-outline-primary"
+       asp-controller="Afastamentos"
+       asp-action="GerarAtaAprovacaoDI"
+       asp-route-id="@Model.Id">Gerar ata</a>
+
+    @if (Model.Solicitante.UserName == User.Identity.Name)
+    {
+        <a class="btn btn-danger"
+           supress-by-role="Professor"
+           asp-action="CancelarAfastamento"
+           asp-route-id="@Model.Id"
+           data-modal="cancelar-afastamento-modal">Cancelar o pedido</a>
+    }
+
+    <a class="btn btn-danger"
+       supress-by-role="Secretario"
+       asp-action="ArquivarAfastamento"
+       asp-route-id="@Model.Id"
+       data-modal="arquivar-afastamento-modal">Arquivar</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            modalBag.add("desbloquear-afastamento-modal", function () {
+                $('#select-decisao-reuniao').select2({
+                    language: "pt-BR",
+                    placeholder: "Selecione uma ação",
+                    allowClear: true,
+                    width: 'resolve'
+                });
+            });
+            modalBag.add("encaminhar-afastamento-modal", function () {
+                $('#select-relator').select2({
+                    language: "pt-BR",
+                    placeholder: "Selecione um relator",
+                    allowClear: true,
+                    width: 'resolve'
+                });
+            });
+            modalBag.add("cancelar-afastamento-modal");
+            modalBag.add("arquivar-afastamento-modal");
+            modalBag.add("confirmar-submissao-documentos-modal");
+            modalBag.add("create-parecer-modal", function () {
+                let fileInput = document.querySelector("input[id='new-parecer-doc']");
+
+                if (fileInput) {
+                    fileInput.addEventListener("change", function () {
+                        document
+                            .querySelector("label[for='new-parecer-doc']")
+                            .innerHTML = this.files[0].name;
+                    });
+                }
+            });
+            modalBag.add("delete-documento-modal");
+            modalBag.add("create-documento-modal", function () {
+                let fileInput = document.querySelector("input[id='new-doc']");
+
+                if (fileInput) {
+                    fileInput.addEventListener("change", function () {
+                        document
+                            .querySelector("label[for='new-doc']")
+                            .innerHTML = this.files[0].name;
+                    });
+                }
+            });
+        });
+    </script>
+}

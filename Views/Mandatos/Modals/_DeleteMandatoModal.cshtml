@@ -1,0 +1,19 @@
+﻿@model SCAP.ViewModels.MandatoViewModel
+
+<form asp-controller="Mandatos" asp-action="Delete">
+    <div class="modal-header">
+        <h5 class="modal-title">Excluir mandato</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <vc:summary></vc:summary>
+        <p class="text-danger m-0">Tem certeza que deseja excluir este mandato?<br />Essa operação não poderá ser desfeita!</p>
+        <input type="hidden" asp-for="Id" />
+    </div>
+    <div class="modal-footer">
+        <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Cancelar" />
+        <input type="submit" class="btn btn-danger" value="Excluir" />
+    </div>
+</form>

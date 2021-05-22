@@ -1,0 +1,19 @@
+﻿@model SCAP.ViewModels.AfastamentoViewModel
+
+<form asp-controller="Afastamentos" asp-action="CancelarAfastamento">
+    <div class="modal-header">
+        <h5 class="modal-title">Cancelar pedido de afastamento</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <vc:summary></vc:summary>
+        <p class="text-danger m-0">Tem certeza que deseja cancelar este pedido de afastamento?</p>
+        <input type="hidden" asp-for="Id" />
+    </div>
+    <div class="modal-footer">
+        <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Não" />
+        <input type="submit" class="btn btn-danger" value="Sim" />
+    </div>
+</form>

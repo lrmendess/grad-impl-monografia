@@ -1,0 +1,29 @@
+﻿@model SCAP.ViewModels.ParecerViewModel
+
+<form method="post" enctype="multipart/form-data" asp-controller="Pareceres" asp-action="Create">
+    <div class="modal-header">
+        <h5 class="modal-title">Emitir parecer</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <vc:summary></vc:summary>
+        <input type="hidden" asp-for="AfastamentoId" />
+        <div class="form-group">
+            <label asp-for="Julgamento" class="control-label"></label><br />
+            <input type="radio" asp-for="Julgamento" value="1" /> Favorável<br />
+            <input type="radio" asp-for="Julgamento" value="2" /> Desfavorável<br />
+            <span asp-validation-for="Julgamento" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Justificativa" class="control-label"></label>
+            <textarea class="form-control" asp-for="Justificativa"></textarea>
+            <span asp-validation-for="Justificativa" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Cancelar" />
+        <input type="submit" class="btn btn-primary" value="Emitir" />
+    </div>
+</form>

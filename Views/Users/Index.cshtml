@@ -1,0 +1,123 @@
+﻿@model SCAP.ViewModels.UserViewModelCollection
+
+@{
+    ViewData["Title"] = "Usuários";
+}
+<vc:summary></vc:summary>
+
+<div class="mb-4">
+    <h2>@ViewData["Title"]</h2>
+</div>
+
+<ul class="nav nav-tabs" id="usersTabContent" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="professores-tab" data-toggle="tab" href="#professores" role="tab" aria-controls="professores" aria-selected="true">Professores</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="secretarios-tab" data-toggle="tab" href="#secretarios" role="tab" aria-controls="secretarios" aria-selected="true">Secretários</a>
+    </li>
+    <li class="nav-item ml-auto">
+        <a class="nav-link"
+           supress-by-role="Secretario"
+           asp-controller="Users"
+           asp-action="Create"
+           data-modal="create-user-modal">
+            <i class="fas fa-plus"></i>
+            <span class="d-none d-md-inline pl-2">
+                Adicionar usuário
+            </span>
+        </a>
+    </li>
+</ul>
+
+<div class="tab-content mt-3" id="professoresTabContent">
+    <div class="tab-pane fade show active" id="professores" role="tabpanel" aria-labelledby="professores-tab">
+        <table id="table-professores" class="table table-hover table-bordered mt-3 mt-lg-0">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Matrícula</th>
+                    <th>Nome</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Professores)
+                {
+                    <tr>
+                        <td>
+                            @item.UserName
+                        </td>
+                        <td>
+                            @item.Nome @item.Sobrenome
+                        </td>
+                        <td class="text-right">
+                            <a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@item.Id">Detalhes</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane fade" id="secretarios" role="tabpanel" aria-labelledby="secretarios-tab">
+        <table id="table-secretarios" class="table table-hover table-bordered mt-3 mt-lg-0">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Matrícula</th>
+                    <th>Nome</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Secretarios)
+                {
+                    <tr>
+                        <td>
+                            @item.UserName
+                        </td>
+                        <td>
+                            @item.Nome @item.Sobrenome
+                        </td>
+                        <td class="text-right">
+                            <a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@item.Id">Detalhes</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            modalBag.add("create-user-modal", function () {
+                $("#PhoneNumber").inputmask({
+                    mask: ["(99) 9999-9999", "(99) 99999-9999"],
+                    keepStatic: true,
+                    removeMaskOnSubmit: true,
+                });
+            });
+
+            const params = {
+                language: { searchPlaceholder: "Nome ou matrícula" },
+                columnDefs: [
+                    { orderable: false, targets: [-1] },
+                    { responsivePriority: 1, targets: [-1] },
+                    { responsivePriority: 2, targets: [0] }
+                ],
+                order: [[1, "asc"]],
+            };
+
+            const tableProfessores = $("#table-professores").DataTable(params);
+            const tableSecretarios = $("#table-secretarios").DataTable(params);
+
+            const recalcTables = function () {
+                tableProfessores.columns.adjust().responsive.recalc();
+                tableSecretarios.columns.adjust().responsive.recalc();
+            };
+
+            $(window).on('resize', recalcTables);
+            $('#usersTabContent .nav-link').on('shown.bs.tab', recalcTables);
+        });
+    </script>
+}

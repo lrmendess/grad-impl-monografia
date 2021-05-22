@@ -1,0 +1,82 @@
+﻿@model SCAP.ViewModels.AfastamentoViewModel
+
+<form asp-controller="Afastamentos" asp-action="Create">
+    <div class="modal-header">
+        <h5 class="modal-title">Novo afastamento</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <vc:summary></vc:summary>
+        <div class="form-group">
+            <label asp-for="NomeEvento" class="control-label"></label>
+            <input asp-for="NomeEvento" class="form-control" />
+            <span asp-validation-for="NomeEvento" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    <label asp-for="DataInicio" class="control-label"></label>
+                    <input asp-for="DataInicio" type="date" class="form-control" />
+                    <span asp-validation-for="DataInicio" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    <label asp-for="DataFim" class="control-label"></label>
+                    <input asp-for="DataFim" type="date" class="form-control" />
+                    <span asp-validation-for="DataFim" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    <label asp-for="TipoAfastamento" class="control-label"></label><br />
+                    <select class="custom-select" asp-for="TipoAfastamento">
+                        <option value="1">Nacional</option>
+                        <option value="2">Internacional</option>
+                    </select>
+                    <span asp-validation-for="TipoAfastamento" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    <label asp-for="Onus" class="control-label"></label><br />
+                    <select class="custom-select" asp-for="Onus">
+                        <option value="1">Total</option>
+                        <option value="2">Parcial</option>
+                        <option value="2">Inexistente</option>
+                    </select>
+                    <span asp-validation-for="Onus" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    <label asp-for="DataInicioEvento" class="control-label"></label>
+                    <input asp-for="DataInicioEvento" type="date" class="form-control" />
+                    <span asp-validation-for="DataInicioEvento" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    <label asp-for="DataFimEvento" class="control-label"></label>
+                    <input asp-for="DataFimEvento" type="date" class="form-control" />
+                    <span asp-validation-for="DataFimEvento" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Motivo" class="control-label"></label>
+            <textarea rows="5" asp-for="Motivo" class="form-control"></textarea>
+            <span asp-validation-for="Motivo" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Cancelar" />
+        <input type="submit" class="btn btn-primary" value="Salvar" disabled="@ViewBag.SelectDisabled" />
+    </div>
+</form>

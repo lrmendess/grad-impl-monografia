@@ -1,0 +1,17 @@
+﻿<div class="modal-header">
+    <h5 class="modal-title">Oops! Parece que algo deu errado.</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true" class="text-white">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <vc:summary></vc:summary>
+    @if (!String.IsNullOrEmpty((String) ViewData["ErrorCode"]))
+    {
+        <h2 class="text-danger">Error @ViewData["ErrorCode"]</h2>
+    }
+    <p class="text-danger m-0">@Html.Raw(ViewData["Notification"])</p>
+</div>
+<div class="modal-footer">
+    <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Fechar" />
+</div>

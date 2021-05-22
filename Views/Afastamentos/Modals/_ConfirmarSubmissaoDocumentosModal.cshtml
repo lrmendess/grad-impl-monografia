@@ -1,0 +1,19 @@
+﻿@model SCAP.ViewModels.AfastamentoViewModel
+
+<form asp-controller="Afastamentos" asp-action="ConfirmarSubmissaoDocumentos">
+    <div class="modal-header">
+        <h5 class="modal-title">Confirmar a submissão de documentos</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <vc:summary></vc:summary>
+        <p class="m-0">Tem certeza que já submeteu todos os documentos necessários?</p>
+        <input type="hidden" asp-for="Id" />
+    </div>
+    <div class="modal-footer">
+        <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Não" />
+        <input type="submit" class="btn btn-primary" value="Sim" />
+    </div>
+</form>

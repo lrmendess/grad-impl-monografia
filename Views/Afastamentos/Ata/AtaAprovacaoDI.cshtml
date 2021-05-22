@@ -1,0 +1,163 @@
+﻿@model SCAP.ViewModels.AfastamentoViewModel
+
+@{ 
+    Layout = "~/Views/Afastamentos/Ata/_Layout.cshtml";
+} 
+
+<h3>Solicitante</h3>
+<dl class="row">
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.Solicitante.UserName)
+    </dt>
+    <dd class="col-sm-9">
+        @Model.Solicitante.UserName
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.Solicitante.Nome)
+    </dt>
+    <dd class="col-sm-9">
+        @Model.Solicitante.Nome @Model.Solicitante.Sobrenome
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.Solicitante.Email)
+    </dt>
+    <dd class="col-sm-9">
+        @Model.Solicitante.Email
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.Solicitante.PhoneNumber)
+    </dt>
+    <dd class="col-sm-9">
+        @Model.Solicitante.PhoneNumber
+    </dd>
+</dl>
+<hr />
+<h3>Detalhes do pedido de afastamento</h3>
+<dl class="row">
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.DataInicio)
+    </dt>
+    <dd class="col-sm-9">
+        @Model.DataInicio.ToShortDateString()
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.DataFim)
+    </dt>
+    <dd class="col-sm-9">
+        @Model.DataFim.ToShortDateString()
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.Situacao)
+    </dt>
+    <dd class="col-sm-9">
+        @(SituacaoPedidoAfastamento.AprovadoDI)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.TipoAfastamento)
+    </dt>
+    <dd class="col-sm-9">
+        @((TipoAfastamento) Model.TipoAfastamento)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.Onus)
+    </dt>
+    <dd class="col-sm-9">
+        @((Onus) Model.Onus)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.NomeEvento)
+    </dt>
+    <dd class="col-sm-9">
+        @Model.NomeEvento
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.DataInicioEvento)
+    </dt>
+    <dd class="col-sm-9">
+        @Model.DataInicioEvento.ToShortDateString()
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.DataFimEvento)
+    </dt>
+    <dd class="col-sm-9">
+        @Model.DataFimEvento.ToShortDateString()
+    </dd>
+    @if (Model.TipoAfastamento == (int)TipoAfastamento.Internacional)
+    {
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.RelatorId)
+        </dt>
+        <dd class="col-sm-9">
+            @(Model.Relator != null ? Model.Relator.Nome + " " + Model.Relator.Sobrenome : "NÃO DEFINIDO")
+        </dd>
+    }
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.SolicitanteId)
+    </dt>
+    <dd class="col-sm-9">
+        @(Model.Solicitante.Nome + " " + Model.Solicitante.Sobrenome)
+    </dd>
+    <dt class="col-sm-3">
+        @Html.DisplayNameFor(model => model.Motivo)
+    </dt>
+    <dd class="col-sm-9">
+        @Html.DisplayFor(model => model.Motivo)
+    </dd>
+</dl>
+
+@if (Model.TipoAfastamento == 2)
+{
+    <hr />
+    <h3>Relator</h3>
+    <dl class="row">
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Relator.UserName)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Relator.UserName)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Relator.Nome)
+        </dt>
+        <dd class="col-sm-9">
+            @Model.Relator.Nome @Model.Relator.Sobrenome
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Relator.Email)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Relator.Email)
+        </dd>
+        <dt class="col-sm-3">
+            @Html.DisplayNameFor(model => model.Relator.PhoneNumber)
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Relator.PhoneNumber)
+        </dd>
+    </dl>
+    <hr />
+    <h3>Parecer do relator</h3>
+    <dl class="row">
+        @{
+            var parecerRelator = Model.Pareceres.Find(p => p.ProfessorId == Model.RelatorId);
+        }
+        <dt class="col-sm-3">
+            Data de emissão
+        </dt>
+        <dd class="col-sm-9">
+            @parecerRelator.DataEmissao.ToShortDateString()
+        </dd>
+        <dt class="col-sm-3">
+            Julgamento
+        </dt>
+        <dd class="col-sm-9">
+            @((TipoParecer)parecerRelator.Julgamento)
+        </dd>
+        <dt class="col-sm-3">
+            Justificativa
+        </dt>
+        <dd class="col-sm-9">
+            @parecerRelator.Justificativa
+        </dd>
+    </dl>
+}

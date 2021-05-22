@@ -1,0 +1,34 @@
+﻿@model SCAP.ViewModels.ParentescoViewModel
+
+<form asp-controller="Parentescos" asp-action="Create">
+    <div class="modal-header">
+        <h5 class="modal-title">Novo parentesco</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <vc:summary></vc:summary>
+        <input type="hidden" asp-for="ParenteDeId" />
+        <div class="form-group">
+            <label asp-for="TipoParentesco" class="control-label"></label><br />
+            <input type="radio" asp-for="TipoParentesco" value="1" /> Sanguíneo<br />
+            <input type="radio" asp-for="TipoParentesco" value="2" /> Matrimonial<br />
+            <span asp-validation-for="TipoParentesco" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ParenteId" class="control-label"></label><br />
+            <select id="select-parente"
+                    class="form-control"
+                    asp-for="ParenteId"
+                    asp-items="@ViewBag.ParenteId">
+                <option disabled selected value=""></option>
+            </select>
+            <span asp-validation-for="ParenteId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Cancelar" />
+        <input type="submit" class="btn btn-primary" value="Salvar" />
+    </div>
+</form>
