@@ -434,11 +434,10 @@ $RECYCLE.BIN/
 # !.vscode/extensions.json
 
 # Custom
-uploads/*
-uploads/
 obj/*
-obj/
 bin/*
-bin/
-.vs/
 .vs/*
+wwwroot/lib
+wwwroot/uploads
+wwwroot/dist
+wwwroot/font-awesome

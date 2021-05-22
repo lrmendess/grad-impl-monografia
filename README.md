@@ -6,6 +6,7 @@
 
 ## Requisitos de ambiente:
 - .NET Core 3.1
+- Libman 2.1
 - MySQL 5.7
 
 
@@ -31,7 +32,14 @@ As variáveis de ambiente abaixo precisam ser definidas nos arquivos `appSetting
 }
 ```
 
-Para executar a aplicação, tenha uma instância do MySQL em funcionamento e utilize o seguinte comando:
+Para executar a aplicação, tenha uma instância do MySQL em funcionamento e utilize os seguintes comandos:
+
 ```bash
-dotnet run
+dotnet restore # Instalação das dependências do projeto
+```
+```bash
+libman restore #Instalação das libs CSS & JS
+```
+```bash
+dotnet run # Execução da aplicação
 ```
