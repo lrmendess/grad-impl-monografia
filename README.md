@@ -6,7 +6,7 @@
 
 ## Requisitos de ambiente:
 - .NET Core 3.1
-- MySQL 5.6
+- MySQL 5.7
 
 
 ## Configurações extras:
